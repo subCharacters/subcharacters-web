@@ -9,7 +9,7 @@ function App() {
         </Heading>
         <Text fontSize="lg" mb={6}>
           Chakra UI로 만든 첫 정적 페이지입니다.
-          GitHub Actions 자동 배포 테스트
+          GitHub Actions 자동 배포 테스트.
         </Text>
         <Button colorScheme="teal" size="lg">
           시작하기
