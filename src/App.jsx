@@ -131,7 +131,7 @@ function Footer() {
       <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-2 px-5 py-8 text-sm text-zinc-500 sm:flex-row sm:items-center">
         <p>© {new Date().getFullYear()} SubCharacters</p>
         <div className="flex items-center gap-4">
-          <a href="/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
+          <a href="/custom-sliding-puzzle/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
             Privacy Policy
           </a>
           <p className="font-mono text-xs">Built with React · Vite · Tailwind</p>
