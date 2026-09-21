@@ -1,70 +1,34 @@
-# Getting Started with Create React App
+# SubCharacters Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+부업으로 이것저것 만들면서 재미 삼아 운영하는 SubCharacters 소개 페이지입니다.
 
-## Available Scripts
+## Stack
 
-In the project directory, you can run:
+- React 19
+- Vite 7
+- Tailwind CSS v4 (다크 모드 기본, `class` 기반 토글)
 
-### `npm start`
+## Scripts
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+npm install
+npm run dev      # 개발 서버 (http://localhost:5173)
+npm run build    # build/ 에 프로덕션 빌드
+npm run preview  # 빌드 결과 미리보기
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 구조
 
-### `npm test`
+```
+index.html              # 엔트리 HTML (테마 초기화 스크립트 포함)
+src/
+  main.jsx
+  App.jsx               # 페이지 섹션 (Nav, Hero, Projects, About, Footer)
+  components/ThemeToggle.jsx
+  data/projects.js      # 프로젝트 카드 데이터
+  index.css             # Tailwind 및 테마 토큰
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 배포
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`master` 브랜치에 push하면 GitHub Actions가 빌드 후 `build/`를 S3에 동기화하고 CloudFront 캐시를 무효화합니다 (`.github/workflows/deploy.yml`).
