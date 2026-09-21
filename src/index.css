@@ -1,13 +1,57 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Segoe UI', sans-serif;
+  --color-accent: #a3e635;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100;
+}
+
+::selection {
+  @apply bg-lime-300 text-zinc-900;
+}
+
+/* 개인정보처리방침 등 긴 문서 본문 */
+.policy:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.policy h2 {
+  @apply mt-12 scroll-mt-20 text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-100;
+}
+
+.policy h3 {
+  @apply mt-6 font-semibold text-zinc-900 dark:text-zinc-100;
+}
+
+.policy p,
+.policy ul {
+  @apply mt-4 leading-relaxed text-zinc-600 dark:text-zinc-400;
+}
+
+.policy ul {
+  @apply list-disc space-y-2 pl-5 marker:text-zinc-400 dark:marker:text-zinc-600;
+}
+
+.policy strong {
+  @apply font-semibold text-zinc-900 dark:text-zinc-100;
+}
+
+.policy a {
+  @apply break-words font-medium text-lime-700 underline decoration-lime-600/40 underline-offset-2 transition hover:decoration-lime-600 dark:text-accent dark:decoration-lime-400/40 dark:hover:decoration-lime-400;
 }
