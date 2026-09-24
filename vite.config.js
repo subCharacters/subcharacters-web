@@ -13,6 +13,8 @@ export default defineConfig({
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
         privacy: resolve(import.meta.dirname, 'custom-sliding-puzzle/privacy.html'),
+        // 공통 에러 페이지 (CloudFront/S3의 403·404 응답 문서로 사용)
+        error: resolve(import.meta.dirname, 'error.html'),
       },
     },
   },
