@@ -235,6 +235,7 @@
 
       /* Boy or Girl? */
       h1 {
+        margin-top: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -268,24 +269,35 @@
         color: var(--ink-soft);
         transform: translateY(-0.18em);
       }
-      .hearts {
-        margin: 10px auto 0;
+      .question {
+        margin: 14px 0 0;
+        font-family: 'Jua', 'Zen Maru Gothic', sans-serif;
+        font-size: clamp(17px, 4.8vw, 21px);
+        color: var(--ink);
+        word-break: keep-all;
+      }
+
+      /* 부모 이름과 태명 */
+      .family {
+        margin: 12px auto 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
-        font-size: 13px;
-        color: #d9c7d6;
+        flex-wrap: wrap;
+        gap: 6px 10px;
+        font-size: clamp(13px, 3.6vw, 15px);
+        color: var(--ink);
       }
-      .hearts::before,
-      .hearts::after {
-        content: '';
-        width: 34px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #e7d5e2);
+      .family .hx {
+        color: var(--pink-2);
       }
-      .hearts::after {
-        background: linear-gradient(90deg, #e7d5e2, transparent);
+      .family .baby {
+        padding: 3px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(224, 71, 158, 0.16);
+        color: var(--pink-3);
+        font-size: 0.92em;
       }
 
       .lead {
@@ -562,13 +574,14 @@
       <main id="game">
         <div class="intro">
           <p class="eyebrow">Gender Reveal</p>
+          <p class="family"><span data-i18n="family">지운 <span class="hx">♥</span> 레이나의 아기</span><span class="baby" data-i18n="baby">태명 · 콩이</span></p>
+          <p class="question" data-i18n="question">콩이의 성별은?</p>
           <h1>
             <span class="word boy">Boy</span>
             <span class="or">or</span>
             <span class="word girl">Girl?</span>
           </h1>
-          <p class="hearts" aria-hidden="true">♥ ★</p>
-          <p class="lead" data-i18n="lead">카드를 뒤집어 같은 색 카드 세 장을 한 줄로 이으면 아기의 성별이 공개돼요.</p>
+          <p class="lead" data-i18n="lead">카드를 뒤집어 같은 색 카드 세 장을 한 줄로 이으면 콩이의 성별이 공개돼요.</p>
         </div>
 
         <div class="board" id="board" role="group" aria-label="3 × 3"></div>
@@ -578,9 +591,10 @@
 
       <section id="result" aria-live="polite">
         <p class="eyebrow">Bingo!</p>
+        <p class="family"><span data-i18n="family">지운 <span class="hx">♥</span> 레이나의 아기</span><span class="baby" data-i18n="baby">태명 · 콩이</span></p>
         <p class="result-emoji" id="result-emoji">🎀</p>
         <h2 class="result-title" id="result-title">It’s a Girl!</h2>
-        <p class="result-sub" id="result-sub">딸이에요</p>
+        <p class="result-sub" id="result-sub">콩이는 딸이에요</p>
         <p class="note" id="note" data-i18n="note">축하해 주셔서 고맙습니다 💕<br />이 페이지는 하루 동안 결과를 기억해요.</p>
       </section>
 
@@ -598,22 +612,28 @@
 
         const I18N = {
           ko: {
-            lead: '카드를 뒤집어 같은 색 카드 세 장을 한 줄로 이으면 아기의 성별이 공개돼요.',
+            family: '지운 <span class="hx">♥</span> 레이나의 아기',
+            baby: '태명 · 콩이',
+            question: '콩이의 성별은?',
+            lead: '카드를 뒤집어 같은 색 카드 세 장을 한 줄로 이으면 콩이의 성별이 공개돼요.',
             start: '카드를 눌러 보세요',
             left: (n) => `${n}장 남았어요`,
             almost: '한 줄을 만들어 보세요',
             note: '축하해 주셔서 고맙습니다 💕<br />이 페이지는 하루 동안 결과를 기억해요.',
             card: (n) => `${n}번 카드 뒤집기`,
-            sub: { girl: '딸이에요', boy: '아들이에요' },
+            sub: { girl: '콩이는 딸이에요', boy: '콩이는 아들이에요' },
           },
           ja: {
-            lead: 'カードをめくって同じ色を3枚そろえると、赤ちゃんの性別が分かります。',
+            family: 'ジウン <span class="hx">♥</span> レイナの赤ちゃん',
+            baby: '胎児ネーム · まめちゃん',
+            question: 'まめちゃんの性別は？',
+            lead: 'カードをめくって同じ色を3枚そろえると、まめちゃんの性別が分かります。',
             start: 'カードをタップしてね',
             left: (n) => `あと${n}枚`,
             almost: '一列をそろえてね',
             note: 'お祝いありがとうございます 💕<br />このページは1日だけ結果を覚えています。',
             card: (n) => `${n}枚目のカードをめくる`,
-            sub: { girl: '女の子です', boy: '男の子です' },
+            sub: { girl: 'まめちゃんは女の子です', boy: 'まめちゃんは男の子です' },
           },
         };
 
