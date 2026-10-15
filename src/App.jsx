@@ -39,7 +39,7 @@ function Hero() {
             <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-75 motion-reduce:hidden" />
             <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
           </span>
-          Side projects in progress
+          Games and more
         </p>
         <h1 className="max-w-3xl text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl">
           만들고 싶은 걸
@@ -81,8 +81,8 @@ function SectionHeading({ eyebrow, title }) {
 function Projects() {
   return (
     <section id="projects" className="mx-auto max-w-5xl scroll-mt-14 px-5 py-24">
-      <SectionHeading eyebrow="Projects" title="진행 중인 프로젝트" />
-      <div className="grid gap-4 md:grid-cols-3">
+      <SectionHeading eyebrow="Projects" title="프로젝트" />
+      <div className="grid gap-4 md:grid-cols-2">
         {projects.map((project, idx) => (
           <article
             key={project.title}
@@ -101,6 +101,14 @@ function Projects() {
                 </li>
               ))}
             </ul>
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex self-start items-center gap-1 text-sm font-medium text-lime-700 transition hover:text-lime-600 dark:text-accent dark:hover:text-lime-300"
+            >
+              Google Play에서 보기 <span aria-hidden="true">↗</span>
+            </a>
           </article>
         ))}
       </div>
@@ -116,7 +124,7 @@ function About() {
         <div className="space-y-4 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
           <p>
             <strong className="font-semibold text-zinc-900 dark:text-zinc-100">SubCharacters</strong>는 본업 외 시간에
-            게임, 웹 도구, 인터랙티브 콘텐츠를 실험하는 개인 작업 공간입니다.
+            게임 등을 실험하는 개인 작업 공간입니다.
           </p>
           <p>완성도보다 재미를 우선하며, 만들어지는 대로 이곳에 하나씩 올려 둡니다.</p>
         </div>
