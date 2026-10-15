@@ -101,14 +101,24 @@ function Projects() {
                 </li>
               ))}
             </ul>
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-6 inline-flex self-start items-center gap-1 text-sm font-medium text-lime-700 transition hover:text-lime-600 dark:text-accent dark:hover:text-lime-300"
-            >
-              Google Play에서 보기 <span aria-hidden="true">↗</span>
-            </a>
+            <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium">
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-lime-700 transition hover:text-lime-600 dark:text-accent dark:hover:text-lime-300"
+                >
+                  Google Play에서 보기 <span aria-hidden="true">↗</span>
+                </a>
+              )}
+              <a
+                href={project.privacyUrl}
+                className="text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              >
+                개인정보처리방침
+              </a>
+            </div>
           </article>
         ))}
       </div>
@@ -138,9 +148,12 @@ function Footer() {
     <footer className="border-t border-zinc-200 dark:border-zinc-800">
       <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-2 px-5 py-8 text-sm text-zinc-500 sm:flex-row sm:items-center">
         <p>© {new Date().getFullYear()} SubCharacters</p>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <a href="/custom-sliding-puzzle/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
-            Privacy Policy
+            Custom Sliding Puzzle Privacy
+          </a>
+          <a href="/deadgrid/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
+            DeadGrid Privacy
           </a>
           <p className="font-mono text-xs">Built with React · Vite · Tailwind</p>
         </div>
