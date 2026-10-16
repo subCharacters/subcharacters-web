@@ -7,9 +7,9 @@ export const projects = [
     privacyUrl: '/custom-sliding-puzzle/privacy.html',
   },
   {
-    title: 'DeadGrid',
+    title: 'ZomGrid',
     description: '타워를 배치하고 골드와 연구를 활용해 적의 공세를 막는 타워 디펜스 게임입니다.',
     tags: ['Tower Defense', 'Game'],
-    privacyUrl: '/deadgrid/privacy.html',
+    privacyUrl: '/zomgrid/privacy.html',
   },
 ];
