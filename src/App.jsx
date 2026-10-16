@@ -152,8 +152,8 @@ function Footer() {
           <a href="/custom-sliding-puzzle/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
             Custom Sliding Puzzle Privacy
           </a>
-          <a href="/deadgrid/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
-            DeadGrid Privacy
+          <a href="/zomgrid/privacy.html" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
+            ZomGrid Privacy
           </a>
           <p className="font-mono text-xs">Built with React · Vite · Tailwind</p>
         </div>
