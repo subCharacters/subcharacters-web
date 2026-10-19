@@ -55,3 +55,59 @@ body {
 .policy a {
   @apply break-words font-medium text-lime-700 underline decoration-lime-600/40 underline-offset-2 transition hover:decoration-lime-600 dark:text-accent dark:decoration-lime-400/40 dark:hover:decoration-lime-400;
 }
+
+.legal-document {
+  font-size: 16px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  @apply text-zinc-700 dark:text-zinc-300;
+}
+
+.legal-document h1,
+.legal-document h2,
+.legal-document h3,
+.legal-document dt,
+.legal-document strong {
+  @apply text-zinc-900 dark:text-zinc-100;
+}
+
+.legal-document h2 {
+  @apply mb-3 mt-8 text-xl font-semibold tracking-tight;
+}
+
+.legal-document h3 {
+  @apply font-semibold;
+}
+
+.legal-app > h3 {
+  @apply mb-3 text-lg;
+}
+
+.legal-app + .legal-app {
+  @apply mt-6;
+}
+
+.legal-details > div {
+  @apply grid gap-2 border-t border-zinc-200 py-4 dark:border-zinc-800 sm:grid-cols-[12rem_minmax(0,1fr)] sm:gap-6;
+}
+
+.legal-details dt {
+  @apply font-medium;
+}
+
+.legal-details dd {
+  min-width: 0;
+}
+
+.legal-details dd p + p,
+.legal-details dd p + h3 {
+  @apply mt-3;
+}
+
+.legal-document a {
+  @apply text-zinc-900 underline decoration-zinc-400 underline-offset-4 hover:decoration-zinc-900 dark:text-zinc-100 dark:decoration-zinc-500 dark:hover:decoration-zinc-100;
+}
+
+.legal-document a:focus-visible {
+  @apply rounded-sm outline-2 outline-offset-4 outline-lime-600 dark:outline-accent;
+}
