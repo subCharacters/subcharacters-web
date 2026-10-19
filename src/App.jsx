@@ -112,6 +112,11 @@ function Projects() {
                   Google Play에서 보기 <span aria-hidden="true">↗</span>
                 </a>
               )}
+              {project.legalUrl && (
+                <a href={project.legalUrl} lang="ja" className="text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+                  特定商取引法に基づく表記
+                </a>
+              )}
               <a
                 href={project.privacyUrl}
                 className="text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
@@ -156,6 +161,9 @@ function Footer() {
             ZomGrid Privacy
           </a>
           <p className="font-mono text-xs">Built with React · Vite · Tailwind</p>
+          <a href="/legal/tokushoho.html" lang="ja" className="transition hover:text-zinc-900 dark:hover:text-zinc-100">
+            特定商取引法に基づく表記
+          </a>
         </div>
       </div>
     </footer>
