@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* 개발 서버에서 src 밖의 HTML(루트 페이지들)도 클래스 스캔 대상에 포함시킨다 */
+@source "../*.html";
+@source "../custom-sliding-puzzle/*.html";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {

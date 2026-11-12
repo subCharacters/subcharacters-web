@@ -18,6 +18,7 @@ export default defineConfig({
         tokushoho: resolve(import.meta.dirname, 'legal/tokushoho.html'),
         // 공통 에러 페이지 (CloudFront/S3의 403·404 응답 문서로 사용)
         error: resolve(import.meta.dirname, 'error.html'),
+        'gender-reveal': resolve(import.meta.dirname, 'gender-reveal.html'),
       },
     },
   },

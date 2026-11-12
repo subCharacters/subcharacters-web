@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="ko" data-answer="girl">
+  <!--
+    data-answer: "girl"(핑크 승) 또는 "boy"(블루 승).
+    카드 배치는 모두에게 동일하며, 이기는 색만 대각선 한 줄을 만들 수 있다.
+    같은 색 카드 세 장이 한 줄로 이어지면 빙고 → 그 색이 결과가 된다.
+    이 페이지는 사이트 공용 스타일(Tailwind·다크 테마)을 쓰지 않는 독립 디자인이다.
+    문구는 ko/ja 두 가지이며 data-i18n 키로 교체된다.
+  -->
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="카드를 뒤집어 같은 색 빙고를 만들면 아기의 성별이 공개됩니다." />
+    <meta name="theme-color" content="#fff7f4" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Gowun+Dodum&family=Jua&family=Zen+Maru+Gothic:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Gender Reveal 🎈</title>
+
+    <meta property="og:title" content="Gender Reveal 🎈" />
+    <meta property="og:description" content="카드를 뒤집어 같은 색 빙고를 만들면 아기의 성별이 공개됩니다." />
+    <meta property="og:type" content="website" />
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      :root {
+        --pink-1: #ffd9ea;
+        --pink-2: #ff7eb6;
+        --pink-3: #e0479e;
+        --blue-1: #d4e6ff;
+        --blue-2: #6aa9ff;
+        --blue-3: #2f6fd0;
+        --cream: #fff7f4;
+        --ink: #4a3f4d;
+        --ink-soft: #8b7d90;
+        --radius: 22px;
+        --win-2: var(--pink-2);
+        --win-3: var(--pink-3);
+        --pad-x: 20px;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+
+      body {
+        min-height: 100svh;
+        font-family: 'Gowun Dodum', 'Zen Maru Gothic', system-ui, sans-serif;
+        color: var(--ink);
+        background: var(--cream);
+        -webkit-font-smoothing: antialiased;
+        -webkit-text-size-adjust: 100%;
+        overscroll-behavior-y: none;
+      }
+
+      :lang(ja) body {
+        font-family: 'Zen Maru Gothic', 'Gowun Dodum', system-ui, sans-serif;
+      }
+
+      /* ─────────── 배경 ─────────── */
+      .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        overflow: hidden;
+        background:
+          radial-gradient(90% 60% at 50% 120%, #ece4ff 0%, transparent 60%),
+          linear-gradient(180deg, #fff7fb 0%, #fff7f4 45%, #f7f4ff 100%);
+      }
+
+      /* 천천히 흐르는 색 덩어리 (blur 필터 대신 radial-gradient → 모바일에서 가볍다) */
+      .aurora {
+        position: absolute;
+        border-radius: 50%;
+        will-change: transform;
+      }
+      .aurora.a {
+        width: 120vmin;
+        height: 120vmin;
+        top: -42vmin;
+        left: -34vmin;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 158, 205, 0.5), rgba(255, 158, 205, 0) 68%);
+        animation: swim-a 26s ease-in-out infinite;
+      }
+      .aurora.b {
+        width: 110vmin;
+        height: 110vmin;
+        top: -18vmin;
+        right: -40vmin;
+        background: radial-gradient(circle at 50% 50%, rgba(140, 186, 255, 0.45), rgba(140, 186, 255, 0) 68%);
+        animation: swim-b 32s ease-in-out infinite;
+      }
+      .aurora.c {
+        width: 96vmin;
+        height: 96vmin;
+        bottom: -34vmin;
+        left: 10vmin;
+        background: radial-gradient(circle at 50% 50%, rgba(196, 174, 255, 0.42), rgba(196, 174, 255, 0) 70%);
+        animation: swim-c 38s ease-in-out infinite;
+      }
+      @keyframes swim-a {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+        50% { transform: translate3d(9vmin, 7vmin, 0) scale(1.12); }
+      }
+      @keyframes swim-b {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+        50% { transform: translate3d(-11vmin, 9vmin, 0) scale(0.95); }
+      }
+      @keyframes swim-c {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+        50% { transform: translate3d(7vmin, -8vmin, 0) scale(1.1); }
+      }
+
+      /* 반짝이는 점 */
+      .sparkles {
+        position: absolute;
+        inset: -10%;
+        background-image:
+          radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 1.4px, transparent 1.6px),
+          radial-gradient(circle, rgba(255, 190, 220, 0.8) 0 1.2px, transparent 1.4px);
+        background-size: 140px 140px, 190px 190px;
+        background-position: 0 0, 70px 90px;
+        animation: twinkle 7s ease-in-out infinite;
+      }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.35; transform: translateY(0); }
+        50% { opacity: 0.75; transform: translateY(-8px); }
+      }
+
+      /* 미세한 질감 */
+      .grain {
+        position: absolute;
+        inset: 0;
+        opacity: 0.16;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      }
+
+      /* 배경에 떠 있는 풍선 (--w 로 크기, --o 로 진하기 조절) */
+      .balloon {
+        position: absolute;
+        width: var(--w, 46px);
+        height: calc(var(--w, 46px) * 1.22);
+        border-radius: 50% 50% 46% 46%;
+        background-image: radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 46%);
+        opacity: var(--o, 0.6);
+        filter: blur(0.8px);
+        animation: drift var(--d, 15s) ease-in-out infinite;
+      }
+      .balloon::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        width: 1px;
+        height: calc(var(--w, 46px) * 0.85);
+        background: rgba(74, 63, 77, 0.22);
+      }
+      @keyframes drift {
+        0%, 100% { transform: translate3d(0, 0, 0) rotate(-4deg); }
+        50% { transform: translate3d(10px, -30px, 0) rotate(4deg); }
+      }
+
+      /* ─────────── 레이아웃 ─────────── */
+      .wrap {
+        position: relative;
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding:
+          calc(env(safe-area-inset-top, 0px) + 68px) var(--pad-x)
+          calc(env(safe-area-inset-bottom, 0px) + 28px);
+        text-align: center;
+      }
+
+      /* 언어 전환 */
+      .lang {
+        position: absolute;
+        top: calc(env(safe-area-inset-top, 0px) + 14px);
+        right: calc(env(safe-area-inset-right, 0px) + 14px);
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(224, 71, 158, 0.12);
+        box-shadow: 0 8px 20px -14px rgba(120, 80, 110, 0.6);
+        backdrop-filter: blur(8px);
+      }
+      .lang button {
+        all: unset;
+        min-width: 56px;
+        min-height: 36px;
+        padding: 0 10px;
+        display: grid;
+        place-items: center;
+        border-radius: 999px;
+        font-family: 'Gowun Dodum', 'Zen Maru Gothic', sans-serif;
+        font-size: 13px;
+        color: var(--ink-soft);
+        cursor: pointer;
+        touch-action: manipulation;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+      .lang button[aria-pressed='true'] {
+        background: linear-gradient(140deg, var(--pink-1), var(--pink-2));
+        color: #fff;
+      }
+
+      .eyebrow {
+        margin: 0;
+        font-family: 'Baloo 2', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.32em;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: var(--ink-soft);
+      }
+
+      /* Boy or Girl? */
+      h1 {
+        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.22em;
+        margin: 10px 0 0;
+        font-family: 'Baloo 2', sans-serif;
+        font-weight: 800;
+        font-size: clamp(34px, 10.5vw, 56px);
+        line-height: 1.18;
+        letter-spacing: -0.01em;
+      }
+      h1 .word {
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: shimmer 5s linear infinite;
+      }
+      h1 .boy {
+        background-image: linear-gradient(100deg, var(--blue-2), var(--blue-3), var(--blue-2));
+      }
+      h1 .girl {
+        background-image: linear-gradient(100deg, var(--pink-2), var(--pink-3), var(--pink-2));
+        animation-delay: -2.5s;
+      }
+      h1 .or {
+        font-family: 'Gowun Dodum', serif;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 0.42em;
+        color: var(--ink-soft);
+        transform: translateY(-0.18em);
+      }
+      .question {
+        margin: 14px 0 0;
+        font-family: 'Jua', 'Zen Maru Gothic', sans-serif;
+        font-size: clamp(17px, 4.8vw, 21px);
+        color: var(--ink);
+        word-break: keep-all;
+      }
+
+      /* 부모 이름과 태명 */
+      .family {
+        margin: 12px auto 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px 10px;
+        font-size: clamp(13px, 3.6vw, 15px);
+        color: var(--ink);
+      }
+      .family .hx {
+        color: var(--pink-2);
+      }
+      .family .baby {
+        padding: 3px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(224, 71, 158, 0.16);
+        color: var(--pink-3);
+        font-size: 0.92em;
+      }
+
+      .lead {
+        margin: 10px auto 0;
+        max-width: 21rem;
+        font-size: clamp(14px, 3.9vw, 16px);
+        line-height: 1.75;
+        color: var(--ink-soft);
+        word-break: keep-all;
+      }
+
+      /* ─────────── 빙고판 ─────────── */
+      .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(8px, 2.6vw, 14px);
+        width: min(330px, 84vw);
+        margin: clamp(20px, 5vh, 34px) auto 0;
+      }
+
+      .tile {
+        all: unset;
+        cursor: pointer;
+        aspect-ratio: 1;
+        perspective: 900px;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+      }
+      .tile[disabled] {
+        cursor: default;
+      }
+
+      .tile-inner {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        transition: transform 0.65s cubic-bezier(0.2, 0.9, 0.25, 1);
+      }
+      .tile.is-flipped .tile-inner {
+        transform: rotateY(180deg);
+      }
+      .tile:active:not(.is-flipped) .tile-inner {
+        transform: scale(0.95);
+      }
+
+      .face {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        border-radius: var(--radius);
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        font-size: clamp(24px, 7vw, 30px);
+      }
+
+      .front {
+        background: linear-gradient(150deg, #ffffff, #fdf4f9);
+        border: 2px solid #f4e6ef;
+        box-shadow: 0 10px 20px -12px rgba(160, 120, 150, 0.55);
+        color: #dcc8d8;
+        font-family: 'Baloo 2', sans-serif;
+        font-weight: 800;
+      }
+      @media (hover: hover) {
+        .tile:not(.is-flipped):hover .front {
+          transform: translateY(-4px) rotate(-1.5deg);
+          transition: transform 0.25s ease;
+        }
+      }
+      .tile:focus-visible .front {
+        outline: 3px solid var(--pink-3);
+        outline-offset: 3px;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+        color: #fff;
+      }
+      .back.pink {
+        background: linear-gradient(150deg, var(--pink-1), var(--pink-2));
+        box-shadow: 0 14px 26px -14px rgba(224, 71, 158, 0.85);
+      }
+      .back.blue {
+        background: linear-gradient(150deg, var(--blue-1), var(--blue-2));
+        box-shadow: 0 14px 26px -14px rgba(47, 111, 208, 0.85);
+      }
+
+      .tile.is-win .tile-inner {
+        animation: win-pop 0.6s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+      }
+      @keyframes win-pop {
+        0% { transform: rotateY(180deg) scale(1); }
+        45% { transform: rotateY(180deg) scale(1.15); }
+        100% { transform: rotateY(180deg) scale(1.05); }
+      }
+
+      .status {
+        margin: clamp(16px, 3vh, 26px) 0 0;
+        font-family: 'Baloo 2', 'Gowun Dodum', sans-serif;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        color: var(--ink-soft);
+      }
+
+      /* ─────────── 결과 ─────────── */
+      #result {
+        display: none;
+        margin-bottom: 9vh;
+        animation: rise 0.8s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+      }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(22px) scale(0.94); }
+        to { opacity: 1; transform: none; }
+      }
+
+      .result-emoji {
+        font-size: clamp(52px, 16vw, 64px);
+        margin: 14px 0 0;
+        animation: bob 2.8s ease-in-out infinite;
+      }
+      @keyframes bob {
+        0%, 100% { transform: translateY(0) rotate(-3deg); }
+        50% { transform: translateY(-10px) rotate(3deg); }
+      }
+
+      .result-title {
+        font-family: 'Baloo 2', sans-serif;
+        font-weight: 800;
+        font-size: clamp(38px, 12vw, 62px);
+        line-height: 1.15;
+        margin: 8px 0 0;
+        background: linear-gradient(90deg, var(--win-2), var(--win-3), var(--win-2));
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: shimmer 4s linear infinite;
+      }
+      @keyframes shimmer {
+        to { background-position: 200% center; }
+      }
+
+      .result-sub {
+        font-family: 'Jua', 'Zen Maru Gothic', sans-serif;
+        font-size: clamp(22px, 6.4vw, 26px);
+        margin: 8px 0 0;
+      }
+
+      .note {
+        margin: 16px auto 0;
+        max-width: 19rem;
+        font-size: clamp(13px, 3.7vw, 15px);
+        line-height: 1.75;
+        color: var(--ink-soft);
+        word-break: keep-all;
+      }
+
+      /* 푸터는 아래에 고정 — 본문(게임·결과)은 화면 가운데에 그대로 둔다 */
+      footer {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+        font-size: 12px;
+        color: #bcaec0;
+      }
+
+      #confetti {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      /* 세로가 짧은 화면: 여백과 글자를 줄여 한 화면에 담는다 */
+      @media (max-height: 700px) {
+        .wrap {
+          padding-top: calc(env(safe-area-inset-top, 0px) + 52px);
+          padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 16px);
+        }
+        h1 {
+          margin-top: 8px;
+          font-size: clamp(24px, 6.4vw, 32px);
+        }
+        .lead {
+          margin-top: 6px;
+        }
+        .board {
+          margin-top: 16px;
+        }
+        .status {
+          margin-top: 14px;
+        }
+        footer {
+          padding-top: 16px;
+        }
+      }
+
+      /* 가로로 눕힌 화면: 문구와 빙고판을 좌우로 나눈다 */
+      @media (orientation: landscape) and (max-height: 520px) {
+        #game {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto;
+          grid-template-areas:
+            'intro board'
+            'status board';
+          align-items: center;
+          gap: 8px 28px;
+          text-align: left;
+          max-width: 640px;
+        }
+        .intro { grid-area: intro; }
+        #game > .board {
+          grid-area: board;
+          margin: 0;
+          width: min(230px, 34vw);
+        }
+        .status {
+          grid-area: status;
+          margin: 0;
+        }
+        .lead {
+          margin-left: 0;
+        }
+        footer {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .tile-inner { transition-duration: 0.01ms; }
+        .aurora,
+        .sparkles,
+        .balloon,
+        .result-emoji,
+        .result-title,
+        .tile.is-win .tile-inner { animation: none; }
+        #result { animation-duration: 0.01ms; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="bg" aria-hidden="true">
+      <div class="aurora a"></div>
+      <div class="aurora b"></div>
+      <div class="aurora c"></div>
+      <div class="balloon" style="left: 4%; top: 12%; --w: 58px; --o: 0.72; --d: 16s; background-color: #ffc2de"></div>
+      <div class="balloon" style="left: 16%; top: 30%; --w: 34px; --o: 0.52; --d: 19s; animation-delay: -7s; background-color: #b9d8ff"></div>
+      <div class="balloon" style="right: 6%; top: 18%; --w: 50px; --o: 0.68; --d: 17s; animation-delay: -5s; background-color: #b9d8ff"></div>
+      <div class="balloon" style="right: 18%; top: 36%; --w: 30px; --o: 0.5; --d: 21s; animation-delay: -11s; background-color: #ffc2de"></div>
+      <div class="balloon" style="left: 8%; top: 52%; --w: 40px; --o: 0.52; --d: 18s; animation-delay: -2s; background-color: #ffc2de"></div>
+      <div class="balloon" style="right: 4%; top: 58%; --w: 44px; --o: 0.58; --d: 20s; animation-delay: -13s; background-color: #ffc2de"></div>
+      <div class="balloon" style="left: 22%; bottom: 8%; --w: 52px; --o: 0.6; --d: 16s; animation-delay: -9s; background-color: #b9d8ff"></div>
+      <div class="balloon" style="right: 24%; bottom: 12%; --w: 36px; --o: 0.55; --d: 22s; animation-delay: -4s; background-color: #b9d8ff"></div>
+      <div class="balloon" style="left: 46%; bottom: 3%; --w: 30px; --o: 0.46; --d: 24s; animation-delay: -15s; background-color: #ffc2de"></div>
+      <div class="balloon" style="right: 40%; top: 6%; --w: 26px; --o: 0.46; --d: 23s; animation-delay: -6s; background-color: #b9d8ff"></div>
+      <div class="sparkles"></div>
+      <div class="grain"></div>
+    </div>
+
+    <div class="wrap">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="ko" aria-pressed="true">한국어</button>
+        <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+      </div>
+
+      <main id="game">
+        <div class="intro">
+          <p class="eyebrow">Gender Reveal</p>
+          <p class="family"><span data-i18n="family">지운 <span class="hx">♥</span> 레이나의 아기</span><span class="baby" data-i18n="baby">태명 · 콩이</span></p>
+          <p class="question" data-i18n="question">콩이의 성별은?</p>
+          <h1>
+            <span class="word boy">Boy</span>
+            <span class="or">or</span>
+            <span class="word girl">Girl?</span>
+          </h1>
+          <p class="lead" data-i18n="lead">카드를 뒤집어 같은 색 카드 세 장을 한 줄로 이으면 콩이의 성별이 공개돼요.</p>
+        </div>
+
+        <div class="board" id="board" role="group" aria-label="3 × 3"></div>
+
+        <p class="status" id="status" aria-live="polite" data-i18n="start">카드를 눌러 보세요</p>
+      </main>
+
+      <section id="result" aria-live="polite">
+        <p class="eyebrow">Bingo!</p>
+        <p class="family"><span data-i18n="family">지운 <span class="hx">♥</span> 레이나의 아기</span><span class="baby" data-i18n="baby">태명 · 콩이</span></p>
+        <p class="result-emoji" id="result-emoji">🎀</p>
+        <h2 class="result-title" id="result-title">It’s a Girl!</h2>
+        <p class="result-sub" id="result-sub">콩이는 딸이에요</p>
+        <p class="note" id="note" data-i18n="note">축하해 주셔서 고맙습니다 💕<br />이 페이지는 하루 동안 결과를 기억해요.</p>
+      </section>
+
+      <canvas id="confetti" aria-hidden="true"></canvas>
+
+      <footer>© 2026 SubCharacters</footer>
+    </div>
+
+    <script>
+      (() => {
+        const answer = document.documentElement.dataset.answer === 'boy' ? 'boy' : 'girl';
+        const COOKIE = 'gr_result';
+        const LANG_KEY = 'gr_lang';
+        const DAY = 86400;
+
+        const I18N = {
+          ko: {
+            family: '지운 <span class="hx">♥</span> 레이나의 아기',
+            baby: '태명 · 콩이',
+            question: '콩이의 성별은?',
+            lead: '카드를 뒤집어 같은 색 카드 세 장을 한 줄로 이으면 콩이의 성별이 공개돼요.',
+            start: '카드를 눌러 보세요',
+            left: (n) => `${n}장 남았어요`,
+            almost: '한 줄을 만들어 보세요',
+            note: '축하해 주셔서 고맙습니다 💕<br />이 페이지는 하루 동안 결과를 기억해요.',
+            card: (n) => `${n}번 카드 뒤집기`,
+            sub: { girl: '콩이는 딸이에요', boy: '콩이는 아들이에요' },
+          },
+          ja: {
+            family: 'ジウン <span class="hx">♥</span> レイナの赤ちゃん',
+            baby: '胎児ネーム · まめちゃん',
+            question: 'まめちゃんの性別は？',
+            lead: 'カードをめくって同じ色を3枚そろえると、まめちゃんの性別が分かります。',
+            start: 'カードをタップしてね',
+            left: (n) => `あと${n}枚`,
+            almost: '一列をそろえてね',
+            note: 'お祝いありがとうございます 💕<br />このページは1日だけ結果を覚えています。',
+            card: (n) => `${n}枚目のカードをめくる`,
+            sub: { girl: 'まめちゃんは女の子です', boy: 'まめちゃんは男の子です' },
+          },
+        };
+
+        const COPY = {
+          girl: { emoji: '🎀', title: 'It’s a Girl!', c2: '#ff7eb6', c3: '#e0479e' },
+          boy: { emoji: '🧸', title: 'It’s a Boy!', c2: '#6aa9ff', c3: '#2f6fd0' },
+        };
+        const MARK = { pink: '♥', blue: '★' };
+
+        // 고정 배치. 완성되는 줄은 맨 윗줄 하나뿐이고,
+        // 나머지 가로·세로·대각선은 어느 색으로도 채워지지 않는다.
+        //   W W W
+        //   L L W
+        //   L W L
+        const W = answer === 'girl' ? 'pink' : 'blue';
+        const L = answer === 'girl' ? 'blue' : 'pink';
+        const BOARD = [W, W, W, L, L, W, L, W, L];
+
+        const LINES = [
+          [0, 1, 2], [3, 4, 5], [6, 7, 8],
+          [0, 3, 6], [1, 4, 7], [2, 5, 8],
+          [0, 4, 8], [2, 4, 6],
+        ];
+
+        const board = document.getElementById('board');
+        const game = document.getElementById('game');
+        const result = document.getElementById('result');
+        const status = document.getElementById('status');
+        const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        const readCookie = (name) =>
+          document.cookie.split('; ').find((c) => c.startsWith(name + '='))?.split('=')[1];
+        const writeCookie = (name, value) => {
+          document.cookie = `${name}=${value}; max-age=${DAY}; path=/; SameSite=Lax`;
+        };
+        const store = {
+          get(key) {
+            try { return localStorage.getItem(key); } catch { return null; }
+          },
+          set(key, value) {
+            try { localStorage.setItem(key, value); } catch { /* 저장 불가 환경 무시 */ }
+          },
+        };
+
+        // ── 언어 ──
+        const saved = store.get(LANG_KEY);
+        const browserJa = (navigator.language || '').toLowerCase().startsWith('ja');
+        let lang = saved === 'ko' || saved === 'ja' ? saved : browserJa ? 'ja' : 'ko';
+        let statusKey = { type: 'start' };
+
+        function applyLang() {
+          const t = I18N[lang];
+          document.documentElement.lang = lang;
+          document.querySelectorAll('[data-i18n]').forEach((el) => {
+            el.innerHTML = t[el.dataset.i18n];
+          });
+          document.querySelectorAll('.lang button').forEach((b) => {
+            b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+          });
+          Array.from(board.children).forEach((tile, i) => {
+            tile.setAttribute('aria-label', t.card(i + 1));
+          });
+          // 상태 문구 다시 그리기
+          if (statusKey.type === 'start') status.textContent = t.start;
+          else if (statusKey.type === 'left') status.textContent = t.left(statusKey.n);
+          else if (statusKey.type === 'almost') status.textContent = t.almost;
+          else status.textContent = 'BINGO!';
+          document.getElementById('result-sub').textContent = t.sub[answer];
+        }
+
+        document.querySelectorAll('.lang button').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            lang = btn.dataset.lang;
+            store.set(LANG_KEY, lang);
+            applyLang();
+          });
+        });
+
+        function showResult(celebrate) {
+          const copy = COPY[answer];
+          const root = document.documentElement;
+          root.style.setProperty('--win-2', copy.c2);
+          root.style.setProperty('--win-3', copy.c3);
+          document.getElementById('result-emoji').textContent = copy.emoji;
+          document.getElementById('result-title').textContent = copy.title;
+          document.getElementById('result-sub').textContent = I18N[lang].sub[answer];
+          game.style.display = 'none';
+          result.style.display = 'block';
+          if (celebrate) confetti();
+        }
+
+        // 하루 안에 이미 맞힌 사람에게는 결과만 보여 준다.
+        if (readCookie(COOKIE) === answer) {
+          applyLang();
+          showResult(false);
+          return;
+        }
+
+        const flipped = new Map(); // index -> color
+
+        BOARD.forEach((color, i) => {
+          const tile = document.createElement('button');
+          tile.type = 'button';
+          tile.className = 'tile';
+          tile.innerHTML = `
+            <span class="tile-inner">
+              <span class="face front">?</span>
+              <span class="face back ${color}">${MARK[color]}</span>
+            </span>`;
+          tile.addEventListener('click', () => flip(i, color, tile), { once: true });
+          board.appendChild(tile);
+        });
+
+        applyLang();
+
+        function flip(index, color, tile) {
+          tile.classList.add('is-flipped');
+          tile.disabled = true;
+          flipped.set(index, color);
+
+          // 같은 색으로 채워진 줄 찾기
+          const win = LINES.find((line) => {
+            const colors = line.map((i) => flipped.get(i));
+            return colors[0] && colors.every((c) => c === colors[0]);
+          });
+
+          const t = I18N[lang];
+          if (!win) {
+            const left = 9 - flipped.size;
+            statusKey = left > 0 ? { type: 'left', n: left } : { type: 'almost' };
+            status.textContent = left > 0 ? t.left(left) : t.almost;
+            return;
+          }
+
+          statusKey = { type: 'bingo' };
+          status.textContent = 'BINGO!';
+          const all = Array.from(board.children);
+          all.forEach((el) => (el.disabled = true));
+          win.forEach((i) => all[i].classList.add('is-win'));
+
+          const rest = all.filter((_, i) => !flipped.has(i));
+          rest.forEach((el, n) => setTimeout(() => el.classList.add('is-flipped'), 130 * (n + 1)));
+          setTimeout(() => showResult(true), reduceMotion ? 300 : 1000 + 130 * rest.length);
+          writeCookie(COOKIE, answer);
+        }
+
+        function confetti() {
+          if (reduceMotion) return;
+          const canvas = document.getElementById('confetti');
+          const ctx = canvas.getContext('2d');
+          const dpr = Math.min(devicePixelRatio || 1, 2);
+          const resize = () => {
+            canvas.width = innerWidth * dpr;
+            canvas.height = innerHeight * dpr;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          };
+          resize();
+          addEventListener('resize', resize);
+
+          const palette =
+            answer === 'girl'
+              ? ['#ffd9ea', '#ff7eb6', '#e0479e', '#ffe9a7', '#ffffff']
+              : ['#d4e6ff', '#6aa9ff', '#2f6fd0', '#c8f3e4', '#ffffff'];
+
+          // 작은 화면에서는 조각 수를 줄인다
+          const count = innerWidth < 480 ? 110 : 160;
+          const pieces = Array.from({ length: count }, () => ({
+            x: innerWidth / 2 + (Math.random() - 0.5) * 140,
+            y: innerHeight / 2 + (Math.random() - 0.5) * 80,
+            vx: (Math.random() - 0.5) * 10,
+            vy: Math.random() * -12 - 3,
+            size: Math.random() * 8 + 4,
+            rot: Math.random() * Math.PI,
+            vr: (Math.random() - 0.5) * 0.32,
+            color: palette[(Math.random() * palette.length) | 0],
+          }));
+
+          const start = performance.now();
+          const tick = (now) => {
+            const elapsed = now - start;
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            pieces.forEach((p) => {
+              p.vy += 0.26; // 중력
+              p.vx *= 0.995;
+              p.x += p.vx;
+              p.y += p.vy;
+              p.rot += p.vr;
+              ctx.save();
+              ctx.translate(p.x, p.y);
+              ctx.rotate(p.rot);
+              ctx.globalAlpha = Math.max(0, 1 - elapsed / 4500);
+              ctx.fillStyle = p.color;
+              ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.62);
+              ctx.restore();
+            });
+            if (elapsed < 4500) requestAnimationFrame(tick);
+            else ctx.clearRect(0, 0, innerWidth, innerHeight);
+          };
+          requestAnimationFrame(tick);
+        }
+      })();
+    </script>
+  </body>
+</html>
